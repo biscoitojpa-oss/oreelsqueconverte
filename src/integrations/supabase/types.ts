@@ -14,7 +14,81 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      saved_reels: {
+        Row: {
+          algorithm_objective: string
+          business_type: string
+          created_at: string
+          id: string
+          objective: string
+          pain_point: string
+          screen_text: Json
+          script: Json
+          title: string | null
+          tone: string
+          user_id: string
+          variations: Json
+          video_prompt: string
+        }
+        Insert: {
+          algorithm_objective: string
+          business_type: string
+          created_at?: string
+          id?: string
+          objective: string
+          pain_point: string
+          screen_text: Json
+          script: Json
+          title?: string | null
+          tone: string
+          user_id: string
+          variations: Json
+          video_prompt: string
+        }
+        Update: {
+          algorithm_objective?: string
+          business_type?: string
+          created_at?: string
+          id?: string
+          objective?: string
+          pain_point?: string
+          screen_text?: Json
+          script?: Json
+          title?: string | null
+          tone?: string
+          user_id?: string
+          variations?: Json
+          video_prompt?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
