@@ -64,7 +64,7 @@ FORMATO DE RESPOSTA (JSON):
     "frame2": "Texto para segundo frame",
     "frame3": "Texto para terceiro frame"
   },
-  "videoPrompt": "Prompt completo para gerar o vídeo no Veo ou Nano Banana",
+  "videoPrompt": "Prompt completo para gerar o vídeo no Veo ou Nano Banana. SEMPRE inclua 'vertical 9:16 aspect ratio' pois Reels são verticais.",
   "variations": {
     "alternativeHooks": ["Hook alternativo 1", "Hook alternativo 2", "Hook alternativo 3"],
     "alternativeClosings": ["Fechamento alternativo 1", "Fechamento alternativo 2"],
