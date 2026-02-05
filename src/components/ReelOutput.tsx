@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
-import { Copy, Check, Film, Type, Wand2, RefreshCw } from "lucide-react";
+import { Copy, Check, Film, Type, Wand2, RefreshCw, Save, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface ReelOutputProps {
   output: {
@@ -25,6 +28,12 @@ interface ReelOutputProps {
     algorithmObjective: string;
   };
   onReset: () => void;
+  formData?: {
+    businessType: string;
+    painPoint: string;
+    objective: string;
+    tone: string;
+  } | null;
 }
 
 function CopyButton({ text, label }: { text: string; label: string }) {
@@ -76,8 +85,57 @@ function OutputCard({
   );
 }
 
-export function ReelOutput({ output, onReset }: ReelOutputProps) {
+export function ReelOutput({ output, onReset, formData }: ReelOutputProps) {
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
   const fullScript = `GANCHO:\n${output.script.hook}\n\nDESENVOLVIMENTO:\n${output.script.development}\n\nFECHAMENTO:\n${output.script.closing}`;
+
+  const handleSave = async () => {
+    if (!user) {
+      toast.error("Faça login para salvar seus Reels", {
+        action: {
+          label: "Entrar",
+          onClick: () => navigate("/auth"),
+        },
+      });
+      return;
+    }
+
+    if (!formData) {
+      toast.error("Dados do formulário não encontrados");
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const { error } = await supabase.from("saved_reels").insert({
+        user_id: user.id,
+        title: formData.businessType,
+        business_type: formData.businessType,
+        pain_point: formData.painPoint,
+        objective: formData.objective,
+        tone: formData.tone,
+        script: output.script,
+        screen_text: output.screenText,
+        video_prompt: output.videoPrompt,
+        variations: output.variations,
+        algorithm_objective: output.algorithmObjective,
+      });
+
+      if (error) throw error;
+      
+      setSaved(true);
+      toast.success("Reel salvo com sucesso!");
+    } catch (error) {
+      console.error("Error saving reel:", error);
+      toast.error("Erro ao salvar Reel. Tente novamente.");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -211,8 +269,24 @@ export function ReelOutput({ output, onReset }: ReelOutputProps) {
         </motion.div>
       </div>
 
-      {/* Reset button */}
-      <motion.div variants={itemVariants} className="flex justify-center pt-6">
+      {/* Action buttons */}
+      <motion.div variants={itemVariants} className="flex flex-wrap justify-center gap-4 pt-6">
+        {formData && (
+          <Button 
+            onClick={handleSave}
+            disabled={saving || saved}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
+          >
+            {saving ? (
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            ) : saved ? (
+              <Check className="w-4 h-4 mr-2" />
+            ) : (
+              <Save className="w-4 h-4 mr-2" />
+            )}
+            {saved ? "Salvo!" : "Salvar Reel"}
+          </Button>
+        )}
         <Button 
           variant="outline" 
           onClick={onReset}

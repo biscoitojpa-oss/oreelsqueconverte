@@ -1,9 +1,14 @@
 import { Sparkles, TrendingUp, Eye, Repeat } from "lucide-react";
 import { motion } from "framer-motion";
+import { UserMenu } from "./UserMenu";
 
 export function Hero() {
   return (
     <header className="text-center py-12 px-4 relative">
+      {/* User Menu */}
+      <div className="absolute top-0 right-0">
+        <UserMenu />
+      </div>
       {/* Logo/Brand */}
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
