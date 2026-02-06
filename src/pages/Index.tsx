@@ -17,6 +17,12 @@ interface FormData {
   tone: string;
 }
 
+interface VideoPrompt {
+  title: string;
+  prompt: string;
+  extendPrompt: string;
+}
+
 interface ReelOutputData {
   script: {
     hook: string;
@@ -28,7 +34,9 @@ interface ReelOutputData {
     frame2: string;
     frame3: string;
   };
-  videoPrompt: string;
+  videoPrompts: VideoPrompt[];
+  // Legacy support for old saved reels
+  videoPrompt?: string;
   variations: {
     alternativeHooks: string[];
     alternativeClosings: string[];
@@ -55,6 +63,7 @@ interface SavedReelData {
     frame3: string;
   };
   video_prompt: string;
+  video_prompts?: VideoPrompt[];
   variations: {
     alternativeHooks: string[];
     alternativeClosings: string[];
@@ -114,9 +123,17 @@ export default function Index() {
 
   const handleSelectSavedReel = (reel: SavedReelData) => {
     // Transform saved reel to output format
+    // Handle legacy single videoPrompt or new videoPrompts array
+    const videoPrompts = reel.video_prompts || (reel.video_prompt ? [{
+      title: "Prompt Principal",
+      prompt: reel.video_prompt,
+      extendPrompt: ""
+    }] : []);
+
     const transformedOutput: ReelOutputData = {
       script: reel.script,
       screenText: reel.screen_text,
+      videoPrompts,
       videoPrompt: reel.video_prompt,
       variations: reel.variations,
       algorithmObjective: reel.algorithm_objective,

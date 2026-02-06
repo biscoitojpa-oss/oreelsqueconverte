@@ -7,6 +7,12 @@ import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
+interface VideoPrompt {
+  title: string;
+  prompt: string;
+  extendPrompt: string;
+}
+
 interface ReelOutputProps {
   output: {
     script: {
@@ -19,7 +25,9 @@ interface ReelOutputProps {
       frame2: string;
       frame3: string;
     };
-    videoPrompt: string;
+    videoPrompts: VideoPrompt[];
+    // Legacy support
+    videoPrompt?: string;
     variations: {
       alternativeHooks: string[];
       alternativeClosings: string[];
@@ -213,20 +221,45 @@ export function ReelOutput({ output, onReset, formData }: ReelOutputProps) {
           </OutputCard>
         </motion.div>
 
-        {/* Video Prompt */}
-        <motion.div variants={itemVariants}>
+        {/* Video Prompts */}
+        <motion.div variants={itemVariants} className="lg:col-span-2">
           <OutputCard 
-            title="Prompt de Vídeo IA" 
+            title="Prompts de Vídeo IA" 
             icon={<Wand2 className="w-5 h-5" />}
-            copyText={output.videoPrompt}
           >
-            <div className="bg-secondary/50 rounded-lg p-4 border border-border">
-              <code className="text-sm text-foreground whitespace-pre-wrap">
-                {output.videoPrompt}
-              </code>
+            <div className="grid gap-4 md:grid-cols-2">
+              {(output.videoPrompts || (output.videoPrompt ? [{
+                title: "Prompt Principal",
+                prompt: output.videoPrompt,
+                extendPrompt: ""
+              }] : [])).map((videoPrompt, index) => (
+                <div key={index} className="bg-secondary/50 rounded-lg p-4 border border-border space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-semibold text-primary">{videoPrompt.title}</span>
+                    <CopyButton text={videoPrompt.prompt} label={videoPrompt.title} />
+                  </div>
+                  <div>
+                    <span className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">Prompt Principal</span>
+                    <code className="block text-sm text-foreground whitespace-pre-wrap mt-1">
+                      {videoPrompt.prompt}
+                    </code>
+                  </div>
+                  {videoPrompt.extendPrompt && (
+                    <div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs uppercase tracking-wider text-muted-foreground font-semibold">Estender no Flow</span>
+                        <CopyButton text={videoPrompt.extendPrompt} label="Extend Prompt" />
+                      </div>
+                      <code className="block text-sm text-foreground/80 whitespace-pre-wrap mt-1">
+                        {videoPrompt.extendPrompt}
+                      </code>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
             <p className="text-xs text-muted-foreground mt-3">
-              Copie e cole no Veo ou Nano Banana
+              Copie e cole no Veo, Nano Banana ou Flow para gerar/estender vídeos
             </p>
           </OutputCard>
         </motion.div>
