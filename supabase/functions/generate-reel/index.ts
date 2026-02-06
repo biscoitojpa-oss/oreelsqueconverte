@@ -64,14 +64,41 @@ FORMATO DE RESPOSTA (JSON):
     "frame2": "Texto para segundo frame",
     "frame3": "Texto para terceiro frame"
   },
-  "videoPrompt": "Prompt completo para gerar o vídeo no Veo ou Nano Banana. SEMPRE inclua 'vertical 9:16 aspect ratio' pois Reels são verticais.",
+  "videoPrompts": [
+    {
+      "title": "Título curto descritivo do estilo (ex: 'Cena Lifestyle')",
+      "prompt": "Prompt completo com 'vertical 9:16 aspect ratio'. Descreva cena, iluminação, movimento de câmera.",
+      "extendPrompt": "Prompt para estender este vídeo no Flow, continuando a cena de forma natural."
+    },
+    {
+      "title": "Segundo estilo visual diferente",
+      "prompt": "Prompt com abordagem visual diferente, mesmo tema. Sempre 'vertical 9:16 aspect ratio'.",
+      "extendPrompt": "Prompt para estender este vídeo."
+    },
+    {
+      "title": "Terceiro estilo visual",
+      "prompt": "Variação com ambiente ou ângulo diferente. 'vertical 9:16 aspect ratio'.",
+      "extendPrompt": "Prompt para estender."
+    },
+    {
+      "title": "Quarto estilo visual",
+      "prompt": "Última variação criativa. 'vertical 9:16 aspect ratio'.",
+      "extendPrompt": "Prompt para estender."
+    }
+  ],
   "variations": {
     "alternativeHooks": ["Hook alternativo 1", "Hook alternativo 2", "Hook alternativo 3"],
     "alternativeClosings": ["Fechamento alternativo 1", "Fechamento alternativo 2"],
     "controversialVersion": "Versão mais polêmica do gancho principal"
   },
   "algorithmObjective": "Descrição curta do objetivo algorítmico"
-}`;
+}
+
+IMPORTANTE PARA videoPrompts:
+- Gere EXATAMENTE 4 prompts de vídeo diferentes
+- Cada prompt deve ter uma abordagem visual DIFERENTE (ex: close-up vs wide shot, indoor vs outdoor, produto em uso vs lifestyle, POV vs terceira pessoa)
+- TODOS devem incluir 'vertical 9:16 aspect ratio'
+- O extendPrompt deve continuar naturalmente a cena do prompt principal, ideal para usar no Flow para estender o vídeo`;
 
     const userPrompt = `Crie um Reel otimizado para distribuição orgânica com os seguintes dados:
 
