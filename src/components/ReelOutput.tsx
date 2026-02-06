@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import type { TablesInsert } from "@/integrations/supabase/types";
 
 interface VideoPrompt {
   title: string;
@@ -119,20 +120,22 @@ export function ReelOutput({ output, onReset, formData }: ReelOutputProps) {
 
     setSaving(true);
     try {
-      const { error } = await supabase.from("saved_reels").insert({
+      const insertData: TablesInsert<"saved_reels"> = {
         user_id: user.id,
         title: formData.businessType,
         business_type: formData.businessType,
         pain_point: formData.painPoint,
         objective: formData.objective,
         tone: formData.tone,
-        script: output.script,
-        screen_text: output.screenText,
+        script: output.script as TablesInsert<"saved_reels">["script"],
+        screen_text: output.screenText as TablesInsert<"saved_reels">["screen_text"],
         video_prompt: output.videoPrompts?.[0]?.prompt || output.videoPrompt || "",
-        video_prompts: output.videoPrompts,
-        variations: output.variations,
+        video_prompts: JSON.parse(JSON.stringify(output.videoPrompts)),
+        variations: output.variations as TablesInsert<"saved_reels">["variations"],
         algorithm_objective: output.algorithmObjective,
-      });
+      };
+      
+      const { error } = await supabase.from("saved_reels").insert(insertData);
 
       if (error) throw error;
       
