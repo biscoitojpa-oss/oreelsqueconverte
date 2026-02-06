@@ -56,6 +56,7 @@ export type Database = {
           user_id: string
           variations: Json
           video_prompt: string
+          video_prompts: Json | null
         }
         Insert: {
           algorithm_objective: string
@@ -71,6 +72,7 @@ export type Database = {
           user_id: string
           variations: Json
           video_prompt: string
+          video_prompts?: Json | null
         }
         Update: {
           algorithm_objective?: string
@@ -86,6 +88,7 @@ export type Database = {
           user_id?: string
           variations?: Json
           video_prompt?: string
+          video_prompts?: Json | null
         }
         Relationships: []
       }
