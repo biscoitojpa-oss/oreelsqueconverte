@@ -128,7 +128,8 @@ export function ReelOutput({ output, onReset, formData }: ReelOutputProps) {
         tone: formData.tone,
         script: output.script,
         screen_text: output.screenText,
-        video_prompt: output.videoPrompt,
+        video_prompt: output.videoPrompts?.[0]?.prompt || output.videoPrompt || "",
+        video_prompts: output.videoPrompts,
         variations: output.variations,
         algorithm_objective: output.algorithmObjective,
       });
