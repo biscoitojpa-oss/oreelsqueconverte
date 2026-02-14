@@ -1,0 +1,39 @@
+
+name: Build for Deploy
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci || npm install
+      - name: Build
+        run: npm run build
+      - name: Find and validate build output
+        id: find-build
+        run: |
+          if [ -d "dist" ] && [ -f "dist/index.html" ]; then
+            echo "build_dir=dist" >> $GITHUB_OUTPUT
+          elif [ -d "build" ] && [ -f "build/index.html" ]; then
+            echo "build_dir=build" >> $GITHUB_OUTPUT
+          elif [ -d "out" ] && [ -f "out/index.html" ]; then
+            echo "build_dir=out" >> $GITHUB_OUTPUT
+          else
+            echo "::error::No valid build output found (missing index.html in dist/, build/, or out/)"
+            exit 1
+          fi
+          echo "Found build at: $(cat $GITHUB_OUTPUT | grep build_dir | cut -d= -f2)"
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: ${{ steps.find-build.outputs.build_dir }}/
+          if-no-files-found: error
+          retention-days: 1
