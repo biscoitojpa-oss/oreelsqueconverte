@@ -91,7 +91,8 @@ FORMATO DE RESPOSTA (JSON):
     "alternativeClosings": ["Fechamento alternativo 1", "Fechamento alternativo 2"],
     "controversialVersion": "Versão mais polêmica do gancho principal"
   },
-  "algorithmObjective": "Descrição curta do objetivo algorítmico"
+  "algorithmObjective": "Descrição curta do objetivo algorítmico",
+  "caption": "Legenda completa para postar no Instagram, com texto envolvente, emojis estratégicos e 20-30 hashtags relevantes misturando hashtags populares e de nicho. A legenda deve complementar o Reel e incentivar engajamento (curtidas, comentários, salvamentos)."
 }
 
 IMPORTANTE PARA videoPrompts:

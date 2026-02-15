@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
-import { Copy, Check, Film, Type, Wand2, RefreshCw, Save, Loader2 } from "lucide-react";
+import { Copy, Check, Film, Type, Wand2, RefreshCw, Save, Loader2, Hash } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
@@ -35,6 +35,7 @@ interface ReelOutputProps {
       controversialVersion: string;
     };
     algorithmObjective: string;
+    caption?: string;
   };
   onReset: () => void;
   formData?: {
@@ -268,6 +269,18 @@ export function ReelOutput({ output, onReset, formData }: ReelOutputProps) {
           </OutputCard>
         </motion.div>
 
+        {/* Caption with Hashtags */}
+        {output.caption && (
+          <motion.div variants={itemVariants} className="lg:col-span-2">
+            <OutputCard 
+              title="Legenda com Hashtags" 
+              icon={<Hash className="w-5 h-5" />}
+              copyText={output.caption}
+            >
+              <p className="text-sm text-foreground whitespace-pre-wrap">{output.caption}</p>
+            </OutputCard>
+          </motion.div>
+        )}
         {/* Variations */}
         <motion.div variants={itemVariants} className="lg:col-span-2">
           <OutputCard 
